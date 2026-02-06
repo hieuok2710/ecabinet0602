@@ -50,8 +50,6 @@ export const SmartAssistant: React.FC<SmartAssistantProps> = ({ document, onClos
       const base64 = await fileToBase64(document.file);
       const mimeType = document.type === 'pdf' ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
       
-      // Convert internal history format for Gemini if needed, but for simplicity we send just the context + new question for now or simple history
-      // Ideally we maintain context in the service.
       const responseText = await chatWithDocument(base64, mimeType, userMsg.text);
 
       const botMsg: ChatMessage = {
