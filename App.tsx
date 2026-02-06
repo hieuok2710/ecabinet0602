@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Meeting, DocumentFile } from './types';
 import { DocumentViewer } from './components/DocumentViewer';
-import { SmartAssistant } from './components/SmartAssistant';
 import { formatFileSize } from './utils/fileUtils';
 import { 
   Layout, 
@@ -11,7 +10,6 @@ import {
   FileText, 
   Search, 
   Menu,
-  Sparkles,
   Users,
   Clock,
   MapPin,
@@ -80,7 +78,6 @@ export default function App() {
   const [selectedMeeting, setSelectedMeeting] = useState<Meeting>(MOCK_MEETINGS[0]);
   const [documents, setDocuments] = useState<DocumentFile[]>([]);
   const [selectedDocument, setSelectedDocument] = useState<DocumentFile | null>(null);
-  const [showAssistant, setShowAssistant] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -105,7 +102,6 @@ export default function App() {
   // States for Settings View
   const [systemConfig, setSystemConfig] = useState({
     emailNotif: true,
-    aiFeatures: true,
     darkMode: false,
     autoSave: true
   });
@@ -166,7 +162,6 @@ export default function App() {
     setDocuments(prev => prev.filter(doc => doc.id !== id));
     if (selectedDocument?.id === id) {
       setSelectedDocument(null);
-      setShowAssistant(false);
     }
   };
 
@@ -407,16 +402,6 @@ export default function App() {
                 ))}
             </div>
           </div>
-
-          <div className="px-4">
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 shadow-inner">
-                <p className="text-xs text-slate-400 leading-relaxed italic">"Trợ lý AI đang sẵn sàng hỗ trợ bạn tóm tắt nội dung cuộc họp trong thời gian thực."</p>
-                <div className="mt-4 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-indigo-400 animate-pulse" />
-                    <span className="text-[10px] text-indigo-400 font-black uppercase tracking-widest">AI Core Active</span>
-                </div>
-            </div>
-          </div>
         </div>
 
         <div className="p-5 border-t border-slate-800/50 bg-slate-900/50 backdrop-blur-sm shrink-0">
@@ -467,18 +452,6 @@ export default function App() {
                     </div>
                     
                     <div className="flex items-center gap-4">
-                        <button 
-                            onClick={() => setShowAssistant(!showAssistant)}
-                            className={`group flex items-center gap-2 px-6 py-3 rounded-2xl font-black transition-all text-xs uppercase tracking-widest ${
-                                showAssistant 
-                                ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30 ring-2 ring-indigo-300' 
-                                : 'bg-white text-slate-700 border border-slate-200 hover:border-indigo-400 hover:text-indigo-600 shadow-sm'
-                            }`}
-                        >
-                            <Sparkles className={`w-4 h-4 ${showAssistant ? 'animate-spin' : 'text-indigo-500 group-hover:scale-125'}`} />
-                            <span>Trợ lý AI</span>
-                        </button>
-                        <div className="h-10 w-px bg-slate-200 mx-1"></div>
                         <div className="flex items-center gap-3 pl-2 cursor-pointer group">
                             <div className="text-right hidden sm:block">
                                 <p className="text-xs font-black text-slate-900 group-hover:text-blue-600 transition-colors">Admin User</p>
@@ -612,14 +585,6 @@ export default function App() {
                                     Tải tài liệu ngay
                                 </button>
                             </div>
-                        )}
-                        
-                        {/* AI Assistant Overlay */}
-                        {showAssistant && (
-                            <SmartAssistant 
-                                document={selectedDocument} 
-                                onClose={() => setShowAssistant(false)} 
-                            />
                         )}
                     </main>
                 </div>
@@ -872,31 +837,6 @@ export default function App() {
                 <div className="flex-1 overflow-auto p-8 bg-slate-50/50">
                     <div className="max-w-3xl mx-auto space-y-6">
                         
-                        {/* AI Config */}
-                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="p-2 bg-indigo-100 text-indigo-600 rounded-xl"><Sparkles className="w-6 h-6" /></div>
-                                <div>
-                                    <h3 className="font-bold text-slate-900 text-lg">Trợ lý ảo AI</h3>
-                                    <p className="text-slate-500 text-sm">Cấu hình các tính năng thông minh Gemini 3.0</p>
-                                </div>
-                            </div>
-                            <div className="space-y-4">
-                                <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100">
-                                    <div>
-                                        <p className="font-bold text-slate-800">Kích hoạt AI Summary</p>
-                                        <p className="text-xs text-slate-500 mt-1">Tự động tóm tắt nội dung tài liệu khi mở</p>
-                                    </div>
-                                    <button 
-                                        onClick={() => setSystemConfig({...systemConfig, aiFeatures: !systemConfig.aiFeatures})}
-                                        className={`w-12 h-6 rounded-full transition-colors relative ${systemConfig.aiFeatures ? 'bg-blue-600' : 'bg-slate-300'}`}
-                                    >
-                                        <span className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all shadow-sm ${systemConfig.aiFeatures ? 'left-7' : 'left-1'}`}></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
                         {/* Notification Config */}
                         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                             <div className="flex items-center gap-3 mb-6">
