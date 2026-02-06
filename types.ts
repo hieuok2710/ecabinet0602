@@ -17,15 +17,15 @@ export interface DocumentFile {
   uploadedAt: Date;
 }
 
+export enum ViewMode {
+  LIST = 'LIST',
+  GRID = 'GRID'
+}
+
 export interface ChatMessage {
   id: string;
   role: 'user' | 'model';
   text: string;
   timestamp: Date;
   isError?: boolean;
-}
-
-export enum ViewMode {
-  LIST = 'LIST',
-  GRID = 'GRID'
 }
